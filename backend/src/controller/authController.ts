@@ -19,7 +19,7 @@ export async function getMe(req:AuthRequest,res:Response,next:NextFunction) {
     }
     catch (error){
         res.status(500)
-        next();
+        next(error);
     }
 }
 
@@ -43,7 +43,7 @@ export async function authCallback(req:Request,res:Response,next:NextFunction) {
     user=await User.create({
         clerkId,
         name:clerkUser.firstName ? `${clerkUser.firstName} ${clerkUser.lastName || ""}`.trim()
-        :clerkUser.emailAddresses[0]?.emailAddress.split("@")[0],
+        :clerkUser.emailAddresses[0]?.emailAddress?.split("@")[0],
         email:clerkUser.emailAddresses[0]?.emailAddress,
         avatar:clerkUser.imageUrl
     });
@@ -52,6 +52,6 @@ export async function authCallback(req:Request,res:Response,next:NextFunction) {
 
   } catch (error) {
       res.status(500)
-      next();
+      next(error);
   }
 }
